@@ -2,3 +2,6 @@ streamlit
 streamlit-option-menu
 streamlit-extras
 Pillow
+pandas
+numpy
+matplotlib
