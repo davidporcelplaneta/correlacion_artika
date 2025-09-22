@@ -12,13 +12,22 @@ from packaging import version
 st.set_page_config(page_title="Correlaciones con Ventas", layout="wide")
 ST_VER = version.parse(st.__version__)
 
-# ---------- Helpers para compatibilidad UI ----------
+# ---------- Helpers de compatibilidad UI ----------
 def show_df(df: pd.DataFrame, *, height=None):
-    """Muestra dataframe con API compatible según versión de Streamlit."""
+    """
+    Muestra dataframe con API compatible según la versión de Streamlit:
+    - ≥ 1.49: width="stretch"
+    - < 1.49: use_container_width=True
+    Nunca pasa height=None (solo si es int o 'stretch').
+    """
+    kwargs = {}
+    if isinstance(height, int) or height == "stretch":
+        kwargs["height"] = height
+
     if ST_VER >= version.parse("1.49.0"):
-        st.dataframe(df, width="stretch", height=height)
+        st.dataframe(df, width="stretch", **kwargs)
     else:
-        st.dataframe(df, use_container_width=True, height=height)
+        st.dataframe(df, use_container_width=True, **kwargs)
 
 def show_info(msg: str):
     st.info(msg)
